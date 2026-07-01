@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Book — Fogue</title>
+  <meta name="description" content="The Fogue cookbook — our favourite recipes, baking notes and sweet stories, collected into one beautiful book." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="topbar"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html">fogue<span class="dot">.</span></a>
+      <nav class="main-nav" id="mainNav" aria-label="Primary">
+        <a href="recipes.html">Recipes</a>
+        <a href="book.html" class="active">Book</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="header-tools">
+        <button class="search-btn" type="button" id="searchOpen" aria-label="Search">
+          <span>Search</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <div class="socials">
+          <a href="https://www.instagram.com/shienafernando" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="book-hero">
+    <div class="wrap book-hero-inner">
+      <div class="book-cover">
+        <img src="public/images/butter-cake.jpg" alt="The Fogue cookbook cover" />
+        <span class="book-badge">New</span>
+      </div>
+      <div class="book-hero-copy">
+        <p class="eyebrow">the fogue cookbook</p>
+        <h1 class="serif">Baked with Love</h1>
+        <p class="book-lead">Every recipe we're proud of — from three-ingredient brigadeiros to towering layer cakes — collected into one warm, beautiful book, with the little notes and stories behind each bake.</p>
+        <div class="book-cta">
+          <a href="https://www.instagram.com/shienafernando" target="_blank" rel="noopener" class="pill">pre-order now</a>
+          <span class="book-price">$34 · ships this fall</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="serif">what's inside</h2>
+      </div>
+      <div class="book-features">
+        <div class="book-feature">
+          <h3 class="serif">80+ recipes</h3>
+          <p>Cakes, cookies, brigadeiros, no-churn ice creams, pies and tarts — all tested until they're foolproof.</p>
+        </div>
+        <div class="book-feature">
+          <h3 class="serif">step-by-step</h3>
+          <p>Clear method, real timings, and the little tips that make the difference between good and unforgettable.</p>
+        </div>
+        <div class="book-feature">
+          <h3 class="serif">stories &amp; notes</h3>
+          <p>The people, places and happy accidents behind our favourite bakes — the sweet stuff between the recipes.</p>
+        </div>
+        <div class="book-feature">
+          <h3 class="serif">beautiful photos</h3>
+          <p>A full-page photograph for every recipe, shot in natural light, so you always know what you're baking toward.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE / STORY -->
+  <section class="section book-story">
+    <div class="wrap">
+      <blockquote class="serif">
+        “This book is everything we've learned in the kitchen, written down so you can bake it at home — no shortcuts, just butter, vanilla and a little patience.”
+      </blockquote>
+      <p class="book-story-by">— Shiena, Fogue Bakery</p>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="band">
+    <h2 class="serif">reserve your copy today</h2>
+    <a href="https://www.instagram.com/shienafernando" target="_blank" rel="noopener" class="pill" style="margin-top:1rem">pre-order on instagram</a>
+    <div class="scallop" aria-hidden="true"></div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-brand">fogue<span class="dot">.</span></div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="recipes.html">Recipes</a>
+        <a href="book.html">Book</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+      </nav>
+      <p class="copyright">&copy; <span id="year"></span> Fogue Bakery · Baked fresh, with love.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

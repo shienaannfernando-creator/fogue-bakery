@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Dashboard — Fogue</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+</head>
+<body>
+
+  <!-- ============ LOGIN VIEW ============ -->
+  <div class="auth-wrap" id="authView">
+    <div class="auth-card">
+      <h1 class="auth-brand">fogue<span class="dot">.</span></h1>
+      <p class="auth-sub" id="authSub">Sign in to manage recipes</p>
+
+      <!-- login form -->
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="loginBtn">Sign in</button>
+        <div class="auth-links">
+          <button type="button" id="showReset">Forgot your password?</button>
+        </div>
+      </form>
+
+      <!-- password reset request form -->
+      <form id="resetForm" class="hidden">
+        <div class="field">
+          <label for="resetEmail">Email</label>
+          <input type="email" id="resetEmail" autocomplete="username" required />
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="resetBtn">Send reset link</button>
+        <div class="auth-links">
+          <button type="button" id="backToLogin">← Back to sign in</button>
+        </div>
+      </form>
+
+      <!-- set-new-password form (shown when returning from a reset email) -->
+      <form id="newPassForm" class="hidden">
+        <div class="field">
+          <label for="newPass">New password</label>
+          <input type="password" id="newPass" autocomplete="new-password" minlength="6" required />
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="newPassBtn">Update password</button>
+      </form>
+
+      <div class="msg" id="authMsg"></div>
+    </div>
+  </div>
+
+  <!-- ============ APP VIEW ============ -->
+  <div id="appView" class="hidden">
+    <div class="topbar-admin">
+      <div>
+        <a href="../index.html" class="brand">fogue<span class="dot">.</span></a>
+        <span class="admin-tag">Admin</span>
+      </div>
+      <div class="top-right">
+        <span class="who" id="whoami"></span>
+        <a href="../index.html" class="view-site" target="_blank" rel="noopener">View site ↗</a>
+        <button class="btn btn-ghost" id="logoutBtn" style="padding:.5rem 1rem">Log out</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="admin-tabs" role="tablist">
+        <button class="tab active" id="tabRecipes" role="tab" aria-selected="true">Recipes</button>
+        <button class="tab" id="tabArticles" role="tab" aria-selected="false">Blog articles</button>
+      </div>
+
+      <!-- ===== RECIPES PANEL ===== -->
+      <section id="panelRecipes">
+        <div class="page-title-row">
+          <div>
+            <h1 class="serif">Recipes</h1>
+            <p id="recipeCount">Loading…</p>
+          </div>
+          <button class="btn btn-add" id="addBtn">
+            <span class="plus">+</span> New recipe
+          </button>
+        </div>
+
+        <div id="recipeList" class="recipe-rows"></div>
+        <div id="listEmpty" class="empty-state hidden">
+          No recipes yet — click <strong>New recipe</strong> to add your first one.
+        </div>
+        <div id="listLoading" class="loading-state">Loading recipes…</div>
+      </section>
+
+      <!-- ===== ARTICLES PANEL ===== -->
+      <section id="panelArticles" class="hidden">
+        <div class="page-title-row">
+          <div>
+            <h1 class="serif">Blog articles</h1>
+            <p id="articleCount">Loading…</p>
+          </div>
+          <button class="btn btn-add" id="addArticleBtn">
+            <span class="plus">+</span> New article
+          </button>
+        </div>
+
+        <div id="articleList" class="recipe-rows"></div>
+        <div id="articleEmpty" class="empty-state hidden">
+          No articles yet — click <strong>New article</strong> to write your first post.
+        </div>
+        <div id="articleLoading" class="loading-state">Loading articles…</div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ============ ADD / EDIT MODAL ============ -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h2 class="serif" id="modalTitle">New recipe</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="recipeForm">
+        <input type="hidden" id="f_id" />
+
+        <div class="field">
+          <label for="f_title">Title *</label>
+          <input type="text" id="f_title" required />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f_category">Category *</label>
+            <input type="text" id="f_category" list="catList" required />
+            <datalist id="catList">
+              <option value="Cookies"></option>
+              <option value="Cakes"></option>
+              <option value="Brigadeiros"></option>
+              <option value="Ice Cream"></option>
+              <option value="Pies & Tarts"></option>
+              <option value="Custom"></option>
+            </datalist>
+          </div>
+          <div class="field">
+            <label for="f_difficulty">Difficulty</label>
+            <select id="f_difficulty">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f_time">Time</label>
+            <input type="text" id="f_time" placeholder="e.g. 35 min" />
+          </div>
+          <div class="field">
+            <label for="f_yield">Yield</label>
+            <input type="text" id="f_yield" placeholder="e.g. About 24 pieces" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f_image">Photo</label>
+          <div class="img-upload">
+            <img class="img-preview empty" id="imgPreview" alt="" src="" />
+            <div style="flex:1">
+              <input type="file" id="f_image" accept="image/*" />
+              <p class="field-hint">JPG or PNG. Uploaded to Supabase Storage. Leave empty to keep the current photo when editing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f_excerpt">Short description (card blurb)</label>
+          <textarea id="f_excerpt" placeholder="One line shown on recipe cards."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="f_intro">Intro paragraph</label>
+          <textarea id="f_intro" placeholder="The longer intro shown at the top of the recipe page."></textarea>
+        </div>
+
+        <div class="field list-input" id="ingredientsWrap">
+          <label>Ingredients</label>
+          <div class="li-list" id="ingredientsList"></div>
+          <button type="button" class="li-add" data-target="ingredientsList" data-kind="ingredient">+ Add ingredient</button>
+        </div>
+
+        <div class="field list-input" id="stepsWrap">
+          <label>Method / steps</label>
+          <div class="li-list" id="stepsList"></div>
+          <button type="button" class="li-add" data-target="stepsList" data-kind="step">+ Add step</button>
+        </div>
+
+        <div class="field">
+          <label style="display:flex;align-items:center;gap:.5rem;text-transform:none">
+            <input type="checkbox" id="f_featured" style="width:auto" />
+            Feature this recipe on the homepage
+          </label>
+        </div>
+
+        <div class="msg" id="formMsg"></div>
+
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save recipe</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ ARTICLE ADD / EDIT MODAL ============ -->
+  <div class="modal-backdrop" id="articleBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="articleModalTitle">
+      <div class="modal-head">
+        <h2 class="serif" id="articleModalTitle">New article</h2>
+        <button class="modal-close" id="articleModalClose" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="articleForm">
+        <input type="hidden" id="a_id" />
+
+        <div class="field">
+          <label for="a_title">Title *</label>
+          <input type="text" id="a_title" required />
+        </div>
+
+        <div class="field">
+          <label for="a_image">Cover photo</label>
+          <div class="img-upload">
+            <img class="img-preview empty" id="aImgPreview" alt="" src="" />
+            <div style="flex:1">
+              <input type="file" id="a_image" accept="image/*" />
+              <p class="field-hint">JPG or PNG. Uploaded to Supabase Storage. Leave empty to keep the current photo when editing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="a_excerpt">Short blurb (shown on the blog list)</label>
+          <textarea id="a_excerpt" placeholder="One or two sentences that preview the post."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="a_body">Article text *</label>
+          <textarea id="a_body" rows="12" placeholder="Write your post here. Leave a blank line between paragraphs." required></textarea>
+          <p class="field-hint">Plain text. A blank line starts a new paragraph.</p>
+        </div>
+
+        <div class="field">
+          <label style="display:flex;align-items:center;gap:.5rem;text-transform:none">
+            <input type="checkbox" id="a_published" style="width:auto" checked />
+            Published (uncheck to save as a hidden draft)
+          </label>
+        </div>
+
+        <div class="msg" id="articleFormMsg"></div>
+
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="articleCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="articleSaveBtn">Save article</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script src="../js/dashboard-articles.js"></script>
+</body>
+</html>

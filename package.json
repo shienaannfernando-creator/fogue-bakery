@@ -1,0 +1,13 @@
+{
+  "name": "fogue-bakery",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fogue Bakery — recipe magazine (static preview)",
+  "scripts": {
+    "dev": "serve . -l 3000",
+    "start": "serve . -l 3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
