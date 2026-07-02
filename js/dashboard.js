@@ -218,8 +218,9 @@
       alert("Delete failed: " + error.message);
       return;
     }
-    // best-effort: remove its uploaded image if it lived in our bucket
+    // best-effort: remove its uploaded photos if they lived in our bucket
     removeStoredImage(r.image);
+    (r.gallery || []).forEach(removeStoredImage);
     loadList();
   }
 
@@ -232,6 +233,46 @@
   const imgPreview = $("imgPreview");
   const fileInput = $("f_image");
   let editingImage = ""; // existing image URL when editing
+
+  /* ---------- additional photos (gallery) ---------- */
+  const galleryGrid = $("galleryGrid");
+  const galleryInput = $("f_gallery");
+  let existingGallery = []; // URLs already saved, kept unless removed
+  let newGalleryFiles = []; // File objects picked this session, kept unless removed
+
+  function renderGallery() {
+    const existingChips = existingGallery.map(
+      (url, i) => `
+        <div class="gallery-chip" data-kind="existing" data-index="${i}">
+          <img src="${escapeAttr(url)}" alt="" />
+          <button type="button" class="chip-remove" aria-label="Remove photo">&times;</button>
+        </div>`
+    );
+    const newChips = newGalleryFiles.map(
+      (file, i) => `
+        <div class="gallery-chip" data-kind="new" data-index="${i}">
+          <img src="${URL.createObjectURL(file)}" alt="" />
+          <button type="button" class="chip-remove" aria-label="Remove photo">&times;</button>
+        </div>`
+    );
+    galleryGrid.innerHTML = existingChips.concat(newChips).join("");
+  }
+
+  galleryGrid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip-remove");
+    if (!btn) return;
+    const chip = btn.closest(".gallery-chip");
+    const index = Number(chip.dataset.index);
+    if (chip.dataset.kind === "existing") existingGallery.splice(index, 1);
+    else newGalleryFiles.splice(index, 1);
+    renderGallery();
+  });
+
+  galleryInput.addEventListener("change", () => {
+    newGalleryFiles = newGalleryFiles.concat(Array.from(galleryInput.files || []));
+    galleryInput.value = "";
+    renderGallery();
+  });
 
   $("addBtn").addEventListener("click", () => openModal(null));
   $("modalClose").addEventListener("click", closeModal);
@@ -247,7 +288,10 @@
     clearMsg(formMsg);
     form.reset();
     fileInput.value = "";
+    galleryInput.value = "";
     editingImage = "";
+    existingGallery = [];
+    newGalleryFiles = [];
 
     if (recipe) {
       $("modalTitle").textContent = "Edit recipe";
@@ -262,6 +306,7 @@
       $("f_featured").checked = !!recipe.featured;
       editingImage = recipe.image || "";
       setPreview(editingImage);
+      existingGallery = (recipe.gallery || []).slice();
       renderListInputs("ingredientsList", recipe.ingredients || [], "ingredient");
       renderListInputs("stepsList", recipe.steps || [], "step");
     } else {
@@ -271,6 +316,7 @@
       renderListInputs("ingredientsList", [""], "ingredient");
       renderListInputs("stepsList", [""], "step");
     }
+    renderGallery();
 
     backdrop.classList.add("open");
     document.body.style.overflow = "hidden";
@@ -392,6 +438,10 @@
         imageUrl = await uploadImage(file);
       }
 
+      // upload any newly-added gallery photos, then combine with the ones kept from before
+      const uploadedGalleryUrls = await Promise.all(newGalleryFiles.map(uploadImage));
+      const gallery = existingGallery.concat(uploadedGalleryUrls);
+
       const base = slugify(title);
       const slug = await uniqueSlug(base, id);
 
@@ -408,6 +458,7 @@
         featured: $("f_featured").checked,
         ingredients: collectList("ingredientsList"),
         steps: collectList("stepsList"),
+        gallery,
       };
 
       let error;

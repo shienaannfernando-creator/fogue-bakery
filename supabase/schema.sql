@@ -24,10 +24,14 @@ create table if not exists public.recipes (
   featured     boolean not null default false,
   ingredients  jsonb not null default '[]'::jsonb, -- array of strings
   steps        jsonb not null default '[]'::jsonb, -- array of strings
+  gallery      jsonb not null default '[]'::jsonb, -- array of extra photo URLs, separate from the cover `image`
   sort_order   int    not null default 0,          -- lower = earlier
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
+
+-- for databases created before the gallery column existed
+alter table public.recipes add column if not exists gallery jsonb not null default '[]'::jsonb;
 
 create index if not exists recipes_category_idx  on public.recipes (category);
 create index if not exists recipes_created_idx    on public.recipes (created_at desc);

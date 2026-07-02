@@ -40,6 +40,12 @@
   const steps = recipe.steps
     .map((s, idx) => `<li><span class="step-num">${idx + 1}</span><p>${s}</p></li>`)
     .join("");
+  const allPhotos = [recipe.image].concat(Array.isArray(recipe.gallery) ? recipe.gallery : []).filter(Boolean);
+  const galleryCols = Math.min(allPhotos.length, 4);
+  const galleryHtml = `<div class="wrap recipe-gallery${allPhotos.length === 1 ? " solo" : ""}" style="grid-template-columns: repeat(${galleryCols}, 1fr);">${allPhotos
+    .map((url) => `<img src="${url}" alt="${recipe.title}" loading="lazy" />`)
+    .join("")}</div>`;
+
   const relatedCards = related
     .map(
       (r) => `
@@ -69,9 +75,7 @@
         </ul>
       </div>
 
-      <div class="wrap recipe-hero">
-        <img src="${recipe.image}" alt="${recipe.title}" />
-      </div>
+      ${galleryHtml}
 
       <div class="wrap recipe-body">
         <div class="recipe-ingredients">

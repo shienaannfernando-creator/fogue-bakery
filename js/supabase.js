@@ -41,6 +41,7 @@ function mapRecipe(row) {
     featured: !!row.featured,
     ingredients: Array.isArray(row.ingredients) ? row.ingredients : [],
     steps: Array.isArray(row.steps) ? row.steps : [],
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
   };
 }
 
