@@ -88,6 +88,27 @@
     window.addEventListener("resize", onSpatulaScroll);
   }
 
+  /* ---------- piping banner: "fogue" hand-piped in icing, plays once on view ---------- */
+  const pipingBanner = $("#pipingBanner");
+  if (pipingBanner) {
+    if ("IntersectionObserver" in window) {
+      const pipeIO = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              pipingBanner.classList.add("is-piped");
+              pipeIO.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      pipeIO.observe(pipingBanner);
+    } else {
+      pipingBanner.classList.add("is-piped");
+    }
+  }
+
   /* ---------- soft bell chime when the tagline heading scrolls into view ---------- */
   const chimeTarget = $("#dreamHeading");
   if (chimeTarget && "IntersectionObserver" in window) {
@@ -147,25 +168,6 @@
   onReady(function () {
     const recipes = window.RECIPES || [];
     const categories = window.CATEGORIES || [];
-
-    /* homepage hero cards */
-    const heroCards = $("#heroCards");
-    if (heroCards) {
-      const featured = recipes.filter((r) => r.featured).slice(1, 4);
-      heroCards.innerHTML = featured
-        .map(
-          (r) => `
-          <article class="mini-card">
-            <a href="recipe?id=${r.id}" class="mini-img"><img src="${r.image}" alt="${r.title}" loading="lazy" /></a>
-            <div>
-              <span class="cat">${r.category}</span>
-              <h3><a href="recipe?id=${r.id}">${r.title}</a></h3>
-              <a href="recipe?id=${r.id}" class="link-arrow">read now <span class="arr">&rarr;</span></a>
-            </div>
-          </article>`
-        )
-        .join("");
-    }
 
     /* homepage summer grid */
     const summerGrid = $("#summerGrid");

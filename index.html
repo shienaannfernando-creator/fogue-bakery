@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=Jost:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
 
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="stylesheet" href="css/style.css" />
@@ -41,23 +41,60 @@
     </div>
   </header>
 
+  <!-- ===================== PIPING BANNER ===================== -->
+  <section class="piping-banner" id="pipingBanner" aria-hidden="true">
+    <div class="wrap piping-inner">
+      <span class="piping-stage">
+        <svg class="piping-bag" viewBox="0 0 60 70" aria-hidden="true">
+          <path class="bag-body" d="M30 2 L54 20 L46 34 L34 34 L34 60 L26 60 L26 34 L14 34 L6 20 Z" />
+          <path class="bag-fold" d="M13 17 L47 17" />
+          <path class="bag-fold" d="M17 9 L43 9" />
+          <circle class="bag-tip" cx="30" cy="63" r="3.5" />
+        </svg>
+        <span class="piping-word-wrap">
+          <span class="piping-word">fogue</span>
+          <span class="piping-curtain" aria-hidden="true"></span>
+        </span>
+      </span>
+    </div>
+  </section>
+
   <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy reveal">
+    <div class="wrap hero-top reveal">
+      <div class="hero-copy">
         <p class="eyebrow">This just in</p>
         <h1 class="hero-title">No-Churn Cookie Crumble Ice Cream</h1>
         <p>Our creamiest scoop yet — a cinnamon-kissed no-churn base folded with buttery homemade cookie chunks. Made in tiny batches, spooned into a coupe, and meant to be shared (or not).</p>
-        <a href="recipe.html?id=cookie-crumble-ice-cream" class="pill pill-beige">let's get baking!</a>
       </div>
-
-      <div class="hero-feature reveal">
+      <div class="hero-feature">
         <a href="recipe.html?id=cookie-crumble-ice-cream">
           <img src="public/images/hero-icecream.jpg" alt="A coupe glass of no-churn cookie crumble ice cream on a marble table" />
         </a>
       </div>
+    </div>
 
-      <div class="hero-cards reveal" id="heroCards"></div>
+    <div class="hero-gallery" aria-hidden="true">
+      <div class="hero-gallery-track">
+        <span class="hero-gallery-img"><img src="public/images/brigadeiros.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/butter-cake.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/cake-orange.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/cookies-cut.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/icecream-coupe.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/pie-meringue.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/sprinkle-cookies.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/brigadeiros.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/butter-cake.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/cake-orange.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/cookies-cut.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/icecream-coupe.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/pie-meringue.jpg" alt="" loading="lazy" /></span>
+        <span class="hero-gallery-img"><img src="public/images/sprinkle-cookies.jpg" alt="" loading="lazy" /></span>
+      </div>
+    </div>
+
+    <div class="wrap hero-cta reveal">
+      <a href="recipe.html?id=cookie-crumble-ice-cream" class="pill pill-beige">let's get baking!</a>
     </div>
   </section>
 

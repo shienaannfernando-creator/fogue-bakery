@@ -190,12 +190,13 @@ ul, ol { margin: 0; }
 /* ============================================================
    Hero
    ============================================================ */
-.hero { padding-block: clamp(2.5rem, 5vw, 4.5rem); }
-.hero-grid {
+.hero { padding-block: clamp(2.5rem, 5vw, 4.5rem); overflow: hidden; }
+.hero-top {
   display: grid;
-  grid-template-columns: 1fr 1.25fr 1fr;
+  grid-template-columns: 1fr auto;
   gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: start;
+  align-items: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 .hero-copy .eyebrow { margin-bottom: 1.2rem; }
 .hero-title {
@@ -205,9 +206,9 @@ ul, ol { margin: 0; }
   font-size: clamp(2.4rem, 4vw, 3.9rem);
   margin: 0 0 1.4rem;
 }
-.hero-copy p { color: var(--ink-soft); margin: 0 0 1.8rem; }
+.hero-copy p { color: var(--ink-soft); margin: 0; }
 
-.hero-feature { overflow: hidden; border-radius: 3px; }
+.hero-feature { width: clamp(120px, 15vw, 190px); overflow: hidden; border-radius: 3px; }
 .hero-feature img {
   width: 100%;
   aspect-ratio: 4 / 5;
@@ -216,15 +217,41 @@ ul, ol { margin: 0; }
 }
 .hero-feature a:hover img { transform: scale(1.04); }
 
-.hero-cards { display: flex; flex-direction: column; gap: 1.6rem; }
-.mini-card { display: grid; grid-template-columns: 96px 1fr; gap: 1rem; align-items: center; }
-.mini-card .mini-img { display: block; overflow: hidden; border-radius: 2px; }
-.mini-card img { width: 96px; height: 110px; object-fit: cover; transition: transform .5s var(--ease); }
-.mini-card .mini-img:hover img { transform: scale(1.06); }
-.mini-card .cat { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
-.mini-card h3 { font-family: var(--serif); font-size: 1.25rem; line-height: 1.15; margin: .35rem 0 .6rem; font-weight: 700; }
-.mini-card h3 a { transition: color .2s var(--ease); }
-.mini-card h3 a:hover { color: var(--pink-text); }
+/* ---------- sliding photo gallery: two copies of the same 7
+   images back to back, scrolling left on an infinite loop ---------- */
+.hero-gallery {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+.hero-gallery-track {
+  display: flex;
+  width: max-content;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  animation: heroGalleryScroll 32s linear infinite;
+}
+.hero-gallery:hover .hero-gallery-track { animation-play-state: paused; }
+.hero-gallery-img {
+  display: block;
+  flex: 0 0 auto;
+  width: clamp(200px, 22vw, 300px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.hero-gallery-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.hero-cta { text-align: center; margin-top: clamp(1.75rem, 3.5vw, 2.75rem); }
+
+@keyframes heroGalleryScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-gallery-track { animation: none; }
+}
 
 /* ============================================================
    Section heading
@@ -463,6 +490,87 @@ ul, ol { margin: 0; }
 }
 
 /* ============================================================
+   Piping banner — "fogue" hand-piped in icing, plays once when
+   scrolled into view (see js/main.js .is-piped toggle)
+   ============================================================ */
+.piping-banner {
+  position: relative;
+  background: var(--cream);
+  border-block: 1px solid var(--line);
+  padding-block: clamp(2rem, 4.5vw, 3.5rem);
+  overflow-x: hidden;
+}
+.piping-inner {
+  display: flex;
+  justify-content: center;
+}
+.piping-stage {
+  position: relative;
+  display: inline-block;
+  padding-bottom: clamp(30px, 4.5vw, 46px);
+}
+.piping-bag {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: clamp(32px, 4vw, 48px);
+  transform: translate(-50%, -4px) rotate(-20deg) scaleY(-1);
+  opacity: 0;
+  filter: drop-shadow(0 4px 6px rgba(43, 39, 36, .25));
+}
+.piping-bag .bag-body { fill: var(--pink); stroke: var(--pink-deep); stroke-width: 2; stroke-linejoin: round; }
+.piping-bag .bag-fold { stroke: var(--pink-deep); stroke-width: 1.6; stroke-linecap: round; fill: none; }
+.piping-bag .bag-tip { fill: var(--pink-deep); }
+
+.piping-word-wrap {
+  position: relative;
+  display: inline-block;
+}
+.piping-word {
+  display: block;
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  font-size: clamp(3.5rem, 10.5vw, 7rem);
+  line-height: 1.3;
+  color: var(--pink-deep);
+  white-space: nowrap;
+}
+/* opaque curtain sits over the word and shrinks away left-to-right,
+   revealing the text underneath — avoids clip-path negative-inset
+   support gaps (Safari clamps negative insets, re-clipping ascenders) */
+.piping-curtain {
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: 0;
+  right: 0;
+  background: var(--cream);
+  transform-origin: left center;
+}
+
+.piping-banner.is-piped .piping-curtain { animation: pipeCurtain 1.8s var(--ease) forwards; }
+.piping-banner.is-piped .piping-bag { animation: pipeMove 1.8s var(--ease) forwards; }
+
+@keyframes pipeCurtain {
+  to { transform: scaleX(0); }
+}
+@keyframes pipeMove {
+  0%   { left: 0%;   opacity: 0; transform: translate(-50%, -4px) rotate(-22deg) scaleY(-1); }
+  6%   { opacity: 1; }
+  30%  { transform: translate(-50%, 3px) rotate(-13deg) scaleY(-1); }
+  55%  { transform: translate(-50%, -5px) rotate(-21deg) scaleY(-1); }
+  80%  { transform: translate(-50%, 2px) rotate(-12deg) scaleY(-1); }
+  94%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; transform: translate(-50%, -3px) rotate(-18deg) scaleY(-1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .piping-curtain { display: none; }
+  .piping-bag { display: none; }
+  .piping-banner.is-piped .piping-curtain,
+  .piping-banner.is-piped .piping-bag { animation: none; }
+}
+
+/* ============================================================
    Newsletter
    ============================================================ */
 .newsletter { background: var(--yellow); padding-block: clamp(3rem, 5vw, 4.5rem); }
@@ -638,10 +746,8 @@ ul, ol { margin: 0; }
    Responsive
    ============================================================ */
 @media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-feature { order: -1; }
-  .hero-feature img { aspect-ratio: 16/10; }
-  .hero-cards { display: grid; grid-template-columns: 1fr 1fr; }
+  .hero-top { grid-template-columns: 1fr; }
+  .hero-feature { justify-self: start; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .split { grid-template-columns: 1fr; }
@@ -672,7 +778,6 @@ ul, ol { margin: 0; }
 }
 
 @media (max-width: 560px) {
-  .hero-cards { grid-template-columns: 1fr; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
   .retailers { grid-template-columns: 1fr; }
