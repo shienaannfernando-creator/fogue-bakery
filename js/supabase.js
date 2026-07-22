@@ -150,10 +150,40 @@ async function fetchArticleBySlug(slug) {
   return data ? mapArticle(data) : null;
 }
 
+/* ---------- magazine PDF (flip-through viewer on book.html) ----------
+   A single file, always uploaded to the same path so the dashboard's
+   "upload" simply overwrites it — no table needed. */
+const MAGAZINE_BUCKET = "magazine-files";
+const MAGAZINE_PDF_PATH = "current.pdf";
+
+/* Returns { url, updatedAt } for the current issue, or null if none
+   has been uploaded yet (or Supabase isn't configured/reachable). */
+async function fetchMagazineInfo() {
+  if (!supabaseClient) return null;
+  let data, error;
+  try {
+    ({ data, error } = await supabaseClient.storage
+      .from(MAGAZINE_BUCKET)
+      .list("", { search: MAGAZINE_PDF_PATH }));
+  } catch (err) {
+    error = err;
+  }
+  if (error || !data || !data.length) return null;
+  const { data: pub } = supabaseClient.storage
+    .from(MAGAZINE_BUCKET)
+    .getPublicUrl(MAGAZINE_PDF_PATH);
+  return {
+    url: pub.publicUrl,
+    updatedAt: data[0].updated_at || data[0].created_at || null,
+  };
+}
+
 if (typeof window !== "undefined") {
   window.supabaseClient = supabaseClient;
   window.STORAGE_BUCKET = STORAGE_BUCKET;
   window.ARTICLE_BUCKET = ARTICLE_BUCKET;
+  window.MAGAZINE_BUCKET = MAGAZINE_BUCKET;
+  window.MAGAZINE_PDF_PATH = MAGAZINE_PDF_PATH;
   window.fetchRecipes = fetchRecipes;
   window.fetchRecipeBySlug = fetchRecipeBySlug;
   window.deriveCategories = deriveCategories;
@@ -161,4 +191,5 @@ if (typeof window !== "undefined") {
   window.fetchArticles = fetchArticles;
   window.fetchArticleBySlug = fetchArticleBySlug;
   window.mapArticle = mapArticle;
+  window.fetchMagazineInfo = fetchMagazineInfo;
 }

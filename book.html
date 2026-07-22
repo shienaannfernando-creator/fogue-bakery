@@ -22,7 +22,7 @@
       <a class="brand" href="index.html">fogue<span class="dot">.</span></a>
       <nav class="main-nav" id="mainNav" aria-label="Primary">
         <a href="recipes.html">Recipes</a>
-        <a href="book.html" class="active">Book</a>
+        <a href="book.html" class="active">Magazine</a>
         <a href="blog.html">Blog</a>
         <a href="about.html">About</a>
       </nav>
@@ -41,19 +41,14 @@
   <!-- HERO -->
   <section class="book-hero">
     <div class="wrap book-hero-inner">
-      <div class="book-cover">
-        <img src="public/images/butter-cake.jpg" alt="The Fogue cookbook cover" />
-        <span class="book-badge">New</span>
-      </div>
-      <div class="book-hero-copy">
-        <p class="eyebrow">the fogue cookbook</p>
-        <h1 class="serif">Baked with Love</h1>
-        <p class="book-lead">Every recipe we're proud of — from three-ingredient brigadeiros to towering layer cakes — collected into one warm, beautiful book, with the little notes and stories behind each bake.</p>
-        <div class="book-cta">
-          <a href="https://www.instagram.com/shienafernando" target="_blank" rel="noopener" class="pill">pre-order now</a>
-          <span class="book-price">$34 · ships this fall</span>
-        </div>
-      </div>
+      <h1 class="serif">an all-in-one magazine</h1>
+    </div>
+  </section>
+
+  <!-- FLIP-THROUGH MAGAZINE -->
+  <section class="section magazine-section">
+    <div class="wrap">
+      <div class="magazine-viewer" id="magazineFlipbook"></div>
     </div>
   </section>
 
@@ -106,7 +101,7 @@
       <div class="footer-brand">fogue<span class="dot">.</span></div>
       <nav class="footer-nav" aria-label="Footer">
         <a href="recipes.html">Recipes</a>
-        <a href="book.html">Book</a>
+        <a href="book.html">Magazine</a>
         <a href="blog.html">Blog</a>
         <a href="about.html">About</a>
       </nav>
@@ -114,6 +109,11 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+  <script src="js/magazine.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -80,6 +80,7 @@
       <div class="admin-tabs" role="tablist">
         <button class="tab active" id="tabRecipes" role="tab" aria-selected="true">Recipes</button>
         <button class="tab" id="tabArticles" role="tab" aria-selected="false">Blog articles</button>
+        <button class="tab" id="tabMagazine" role="tab" aria-selected="false">Magazine</button>
       </div>
 
       <!-- ===== RECIPES PANEL ===== -->
@@ -118,6 +119,29 @@
           No articles yet — click <strong>New article</strong> to write your first post.
         </div>
         <div id="articleLoading" class="loading-state">Loading articles…</div>
+      </section>
+
+      <!-- ===== MAGAZINE PANEL ===== -->
+      <section id="panelMagazine" class="hidden">
+        <div class="page-title-row">
+          <div>
+            <h1 class="serif">Magazine</h1>
+            <p id="magazineStatus">Loading…</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="mag_file">Magazine PDF</label>
+          <input type="file" id="mag_file" accept="application/pdf" />
+          <p class="field-hint">Uploading a new PDF replaces the current issue shown in the flip-through viewer on the Magazine page.</p>
+        </div>
+
+        <div class="msg" id="magazineMsg"></div>
+
+        <div class="magazine-actions">
+          <button class="btn btn-primary" id="magUploadBtn">Upload magazine PDF</button>
+          <a class="btn btn-ghost hidden" id="magazineViewLink" href="#" target="_blank" rel="noopener">View current PDF ↗</a>
+        </div>
       </section>
     </div>
   </div>
@@ -288,5 +312,6 @@
   <script src="../js/supabase.js"></script>
   <script src="../js/dashboard.js"></script>
   <script src="../js/dashboard-articles.js"></script>
+  <script src="../js/dashboard-magazine.js"></script>
 </body>
 </html>

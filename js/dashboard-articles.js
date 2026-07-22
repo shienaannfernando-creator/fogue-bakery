@@ -12,23 +12,25 @@
   if (!sb) return; // dashboard.js already warns the user
 
   /* ---------- tab switching ---------- */
-  const tabRecipes = $("tabRecipes");
-  const tabArticles = $("tabArticles");
-  const panelRecipes = $("panelRecipes");
-  const panelArticles = $("panelArticles");
+  const tabs = {
+    recipes: { tab: $("tabRecipes"), panel: $("panelRecipes") },
+    articles: { tab: $("tabArticles"), panel: $("panelArticles") },
+    magazine: { tab: $("tabMagazine"), panel: $("panelMagazine") },
+  };
 
-  function activate(tab) {
-    const isArticles = tab === "articles";
-    tabArticles.classList.toggle("active", isArticles);
-    tabRecipes.classList.toggle("active", !isArticles);
-    tabArticles.setAttribute("aria-selected", String(isArticles));
-    tabRecipes.setAttribute("aria-selected", String(!isArticles));
-    panelArticles.classList.toggle("hidden", !isArticles);
-    panelRecipes.classList.toggle("hidden", isArticles);
-    if (isArticles && !loadedOnce) loadList();
+  function activate(name) {
+    Object.keys(tabs).forEach((key) => {
+      const isActive = key === name;
+      tabs[key].tab.classList.toggle("active", isActive);
+      tabs[key].tab.setAttribute("aria-selected", String(isActive));
+      tabs[key].panel.classList.toggle("hidden", !isActive);
+    });
+    if (name === "articles" && !loadedOnce) loadList();
+    if (name === "magazine" && window.loadMagazinePanel) window.loadMagazinePanel();
   }
-  tabRecipes.addEventListener("click", () => activate("recipes"));
-  tabArticles.addEventListener("click", () => activate("articles"));
+  Object.keys(tabs).forEach((key) =>
+    tabs[key].tab.addEventListener("click", () => activate(key))
+  );
 
   /* ---------- load articles when signed in ---------- */
   let loadedOnce = false;
