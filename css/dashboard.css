@@ -265,6 +265,7 @@ a { color: var(--pink-text); }
 .recipe-row .meta .tag-pill.feat { background: var(--pink); color: var(--pink-text); }
 .recipe-row .row-actions { display: flex; gap: 0.5rem; }
 .recipe-row .row-actions .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
+.recipe-row.no-thumb { grid-template-columns: 1fr auto; }
 
 .empty-state, .loading-state {
   text-align: center;

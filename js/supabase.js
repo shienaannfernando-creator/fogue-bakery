@@ -150,32 +150,70 @@ async function fetchArticleBySlug(slug) {
   return data ? mapArticle(data) : null;
 }
 
-/* ---------- magazine PDF (flip-through viewer on book.html) ----------
-   A single file, always uploaded to the same path so the dashboard's
-   "upload" simply overwrites it — no table needed. */
+/* ---------- magazine issues (flip-through viewers on book.html) ----------
+   Each row in magazine_issues points at its own PDF in this bucket, so
+   any number of issues can be uploaded and shown side by side. */
 const MAGAZINE_BUCKET = "magazine-files";
-const MAGAZINE_PDF_PATH = "current.pdf";
 
-/* Returns { url, updatedAt } for the current issue, or null if none
-   has been uploaded yet (or Supabase isn't configured/reachable). */
-async function fetchMagazineInfo() {
-  if (!supabaseClient) return null;
-  let data, error;
-  try {
-    ({ data, error } = await supabaseClient.storage
-      .from(MAGAZINE_BUCKET)
-      .list("", { search: MAGAZINE_PDF_PATH }));
-  } catch (err) {
-    error = err;
-  }
-  if (error || !data || !data.length) return null;
+function mapMagazineIssue(row) {
   const { data: pub } = supabaseClient.storage
     .from(MAGAZINE_BUCKET)
-    .getPublicUrl(MAGAZINE_PDF_PATH);
+    .getPublicUrl(row.pdf_path);
   return {
+    id: row.id,
+    title: row.title,
     url: pub.publicUrl,
-    updatedAt: data[0].updated_at || data[0].created_at || null,
+    pdfPath: row.pdf_path,
+    sortOrder: row.sort_order || 0,
+    createdAt: row.created_at || null,
   };
+}
+
+/* Fetch every magazine issue, in the order they should be shown. */
+async function fetchMagazineIssues() {
+  if (!supabaseClient) return [];
+  const { data, error } = await supabaseClient
+    .from("magazine_issues")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) {
+    console.error("Failed to load magazine issues:", error.message);
+    return [];
+  }
+  return (data || []).map(mapMagazineIssue);
+}
+
+/* ---------- HEIC conversion (iPhone photos) ----------
+   Browsers can't render HEIC in an <img> tag, so the dashboard transcodes
+   it to JPEG (via the heic2any CDN script) before it ever reaches
+   Supabase Storage. Only loaded/used on the dashboard page. */
+function isHeicFile(file) {
+  const name = (file.name || "").toLowerCase();
+  return (
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    name.endsWith(".heic") ||
+    name.endsWith(".heif")
+  );
+}
+
+async function convertHeicIfNeeded(file) {
+  if (!isHeicFile(file)) return file;
+  if (typeof window.heic2any !== "function") {
+    throw new Error("HEIC conversion isn't available right now — please convert this photo to JPEG and try again.");
+  }
+  let converted;
+  try {
+    converted = await window.heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 });
+  } catch (err) {
+    throw new Error(
+      "This HEIC photo couldn't be converted (it may be a Live Photo, burst shot, or an unusual HEIC variant browsers can't decode). Please export it as JPEG or PNG and try again."
+    );
+  }
+  const blob = Array.isArray(converted) ? converted[0] : converted;
+  const newName = file.name.replace(/\.[^.]+$/, "") + ".jpg";
+  return new File([blob], newName, { type: "image/jpeg" });
 }
 
 if (typeof window !== "undefined") {
@@ -183,7 +221,6 @@ if (typeof window !== "undefined") {
   window.STORAGE_BUCKET = STORAGE_BUCKET;
   window.ARTICLE_BUCKET = ARTICLE_BUCKET;
   window.MAGAZINE_BUCKET = MAGAZINE_BUCKET;
-  window.MAGAZINE_PDF_PATH = MAGAZINE_PDF_PATH;
   window.fetchRecipes = fetchRecipes;
   window.fetchRecipeBySlug = fetchRecipeBySlug;
   window.deriveCategories = deriveCategories;
@@ -191,5 +228,7 @@ if (typeof window !== "undefined") {
   window.fetchArticles = fetchArticles;
   window.fetchArticleBySlug = fetchArticleBySlug;
   window.mapArticle = mapArticle;
-  window.fetchMagazineInfo = fetchMagazineInfo;
+  window.fetchMagazineIssues = fetchMagazineIssues;
+  window.mapMagazineIssue = mapMagazineIssue;
+  window.convertHeicIfNeeded = convertHeicIfNeeded;
 }

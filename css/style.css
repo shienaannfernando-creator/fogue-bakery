@@ -417,6 +417,47 @@ ul, ol { margin: 0; }
 .value h3 { font-family: var(--serif); font-weight: 700; font-size: 1.5rem; margin: .6rem 0 .7rem; }
 .value p { color: var(--ink-soft); margin: 0; }
 
+/* ---------- "type 3 diabetes?" 3D animated headline ---------- */
+.diabetes-section { text-align: center; overflow: hidden; padding-block: clamp(1.5rem, 4vw, 2.5rem); }
+.diabetes-headline {
+  margin: 0;
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center;
+  gap: 0 .08em;
+  font-family: var(--serif); font-weight: 900;
+  font-size: clamp(2rem, 6.5vw, 4.6rem);
+  perspective: 700px;
+  transform: rotateX(8deg);
+}
+.d-letter {
+  display: inline-block;
+  color: #ffdfb0;
+  text-shadow:
+    1px 1px 0 #f4a94f,
+    2px 2px 0 #f4a94f,
+    3px 3px 0 #e89a3f,
+    4px 4px 0 #d88a34,
+    5px 5px 0 #c47a2c,
+    6px 6px 0 #ad6a25,
+    8px 9px 10px rgba(43, 39, 36, .35);
+  animation: d-bounce 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * .09s);
+}
+.d-space { display: inline-block; width: .35em; }
+.diabetes-desc {
+  max-width: 42rem; margin: 1.5rem auto 0;
+  color: var(--ink-soft); font-size: 1.05rem; line-height: 1.7;
+}
+.diabetes-section .pill { margin-top: 1.8rem; }
+
+@keyframes d-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(-3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .d-letter { animation: none; }
+}
+
 .goals { background: var(--cream); }
 .goals .section-head { flex-direction: column; align-items: center; max-width: 46ch; margin: 0 auto 2.5rem; text-align: center; }
 .goals .goal-intro { color: var(--ink-soft); font-style: italic; margin: 1rem auto 0; max-width: 32rem; }
@@ -840,12 +881,110 @@ ul, ol { margin: 0; }
 .book-hero { background: var(--cream); padding: clamp(2rem, 5vw, 3rem) 0 5rem; text-align: center; }
 .book-hero-inner h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.05; margin: 0; }
 
+/* ---------- cutout-paper issue headline ----------
+   Six reusable colourway/shape combos (.cutout-c1 … .cutout-c6),
+   cycled per letter by js/magazine.js so any issue title can be
+   rendered in this ransom-note cutout style, not just "Issue 1". */
+.issue-headline-section { padding: clamp(2.5rem, 6vw, 4rem) 0 0; }
+.issue-headline-section:first-child { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+.issue-headline {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: clamp(.4rem, 1.4vw, 1rem);
+  margin: 0; padding: 0 var(--gutter);
+}
+.cutout {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(3.2rem, 8vw, 5.6rem);
+  height: clamp(4.2rem, 10.5vw, 7.2rem);
+  box-shadow: 0 10px 18px -8px rgba(43, 39, 36, .45);
+  background-blend-mode: multiply;
+  background-repeat: repeat;
+}
+.cutout::before {
+  /* crinkled / creased paper texture, layered as a diamond crosshatch */
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.09) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,.09) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.12) 0 1px, transparent 1px 22px);
+  mix-blend-mode: multiply;
+  clip-path: inherit;
+}
+.cutout-letter {
+  position: relative; z-index: 1;
+  font-family: var(--serif); font-weight: 900; line-height: 1;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+}
+.cutout-space { width: clamp(.8rem, 2vw, 1.6rem); }
+
+/* torn/cut edges — a different jagged polygon + tilt + colourway per combo */
+.cutout-c1 {
+  background-color: var(--pink-deep);
+  clip-path: polygon(8% 0%, 92% 3%, 100% 10%, 94% 22%, 100% 35%, 92% 48%, 100% 62%, 94% 75%, 100% 90%, 88% 100%, 6% 97%, 0% 85%, 8% 70%, 0% 55%, 8% 40%, 0% 25%, 8% 12%);
+  transform: rotate(-9deg) translateY(2px);
+}
+.cutout-c1 .cutout-letter { color: var(--cream); }
+
+.cutout-c2 {
+  background-color: #d8536f;
+  clip-path: polygon(15% 0%, 85% 4%, 100% 18%, 96% 40%, 100% 58%, 88% 78%, 96% 92%, 78% 100%, 55% 94%, 30% 100%, 8% 90%, 0% 68%, 6% 45%, 0% 22%, 10% 6%);
+  transform: rotate(7deg) translateY(-4px);
+  width: clamp(3.6rem, 9vw, 6.2rem);
+}
+.cutout-c2 .cutout-letter { color: var(--yellow-deep); font-style: italic; }
+
+.cutout-c3 {
+  background-color: var(--pink-light);
+  clip-path: polygon(4% 0%, 96% 0%, 100% 14%, 92% 30%, 100% 48%, 94% 66%, 100% 84%, 90% 100%, 10% 100%, 0% 86%, 8% 68%, 0% 50%, 6% 32%, 0% 16%);
+  transform: rotate(-4deg) translateY(6px);
+}
+.cutout-c3 .cutout-letter { color: #1f3a3a; }
+
+.cutout-c4 {
+  background-color: #8fd6ce;
+  clip-path: polygon(0% 6%, 10% 0%, 90% 0%, 100% 8%, 100% 92%, 90% 100%, 10% 100%, 0% 92%);
+  transform: rotate(3deg) translateY(-2px);
+  width: clamp(3.6rem, 9vw, 6.4rem);
+}
+.cutout-c4 .cutout-letter { color: #3a1a5c; font-style: italic; }
+
+.cutout-c5 {
+  background-color: #f0c93e;
+  clip-path: polygon(20% 0%, 55% 6%, 100% 0%, 96% 40%, 100% 55%, 90% 62%, 100% 78%, 60% 100%, 30% 96%, 8% 100%, 0% 60%, 10% 30%, 0% 10%);
+  transform: rotate(10deg) translateY(4px);
+  width: clamp(3.8rem, 9.5vw, 6.6rem);
+}
+.cutout-c5 .cutout-letter { color: #9c1f4a; }
+
+.cutout-c6 {
+  background-color: #d9c19a;
+  clip-path: polygon(6% 0%, 100% 4%, 94% 20%, 100% 100%, 12% 100%, 18% 60%, 0% 40%, 10% 18%);
+  transform: rotate(-6deg) translateY(0);
+  width: clamp(2.8rem, 7vw, 4.6rem);
+}
+.cutout-c6 .cutout-letter { color: #b0184a; }
+
+@media (max-width: 560px) {
+  .issue-headline { gap: .3rem; }
+  .cutout { box-shadow: 0 6px 12px -6px rgba(43, 39, 36, .4); }
+}
+
 /* ---------- flip-through magazine viewer ---------- */
 .magazine-section { display: flex; justify-content: center; padding-top: 0; }
+.magazine-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.6rem, 2.5vw, 1.5rem);
+  width: 100%;
+}
 .magazine-viewer {
   width: 1400px;
   height: 1000px;
   max-width: 100%;
+  min-width: 0;
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -857,6 +996,28 @@ ul, ol { margin: 0; }
   padding: 3rem 1rem;
 }
 .magazine-flip { width: 100%; filter: drop-shadow(0 20px 40px rgba(43, 39, 36, .25)); }
+
+/* arrows sit outside the book, beside the flipbook, not over the pages */
+.magazine-arrow {
+  flex: 0 0 auto;
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--offwhite); color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s var(--ease), background .15s var(--ease), opacity .15s var(--ease);
+}
+.magazine-arrow:hover:not(:disabled) { background: var(--pink-light); }
+.magazine-arrow:active:not(:disabled) { transform: scale(.92); }
+.magazine-arrow:disabled { opacity: .3; cursor: not-allowed; }
+
+@media (max-width: 820px) {
+  /* below this width the flipbook's own minimum size no longer leaves
+     room beside it for the arrows without overlapping the pages —
+     swipe/drag (already supported by the flipbook) still works. */
+  .magazine-arrow { display: none; }
+}
 
 .book-features {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;

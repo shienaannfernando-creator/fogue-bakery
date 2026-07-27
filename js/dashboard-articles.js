@@ -181,9 +181,17 @@
       imgPreview.classList.add("empty");
     }
   }
-  fileInput.addEventListener("change", () => {
+  fileInput.addEventListener("change", async () => {
     const f = fileInput.files && fileInput.files[0];
-    setPreview(f ? URL.createObjectURL(f) : editingImage);
+    if (!f) {
+      setPreview(editingImage);
+      return;
+    }
+    try {
+      setPreview(URL.createObjectURL(await convertHeicIfNeeded(f)));
+    } catch (_) {
+      setPreview(URL.createObjectURL(f)); // fall back to raw file if conversion fails
+    }
   });
 
   function slugify(text) {
@@ -253,6 +261,7 @@
   });
 
   async function uploadImage(file) {
+    file = await convertHeicIfNeeded(file);
     const bucket = window.ARTICLE_BUCKET;
     const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;

@@ -340,10 +340,17 @@
     }
   }
 
-  fileInput.addEventListener("change", () => {
+  fileInput.addEventListener("change", async () => {
     const file = fileInput.files && fileInput.files[0];
-    if (file) setPreview(URL.createObjectURL(file));
-    else setPreview(editingImage);
+    if (!file) {
+      setPreview(editingImage);
+      return;
+    }
+    try {
+      setPreview(URL.createObjectURL(await convertHeicIfNeeded(file)));
+    } catch (_) {
+      setPreview(URL.createObjectURL(file)); // fall back to raw file if conversion fails
+    }
   });
 
   /* dynamic ingredient/step inputs */
@@ -480,6 +487,7 @@
   });
 
   async function uploadImage(file) {
+    file = await convertHeicIfNeeded(file);
     const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const { error } = await sb.storage
