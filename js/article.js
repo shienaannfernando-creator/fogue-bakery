@@ -21,13 +21,24 @@
   }
 
   // Turn plain text into paragraphs: blank lines separate paragraphs,
-  // single newlines become <br>.
+  // single newlines become <br>. A paragraph containing only
+  // ![alt](url) is rendered as an inline image instead of text, so
+  // photos can be dropped in between paragraphs.
+  const imageLine = /^!\[([^\]]*)\]\(([^)]+)\)$/;
+
   function bodyHTML(text) {
     return String(text || "")
       .split(/\n\s*\n/)
       .map((p) => p.trim())
       .filter(Boolean)
-      .map((p) => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`)
+      .map((p) => {
+        const m = p.match(imageLine);
+        if (m) {
+          const [, alt, url] = m;
+          return `<img class="article-inline-img" src="${esc(url)}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()" />`;
+        }
+        return `<p>${esc(p).replace(/\n/g, "<br>")}</p>`;
+      })
       .join("");
   }
 

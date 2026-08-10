@@ -295,7 +295,11 @@
         <div class="field">
           <label for="a_body">Article text *</label>
           <textarea id="a_body" rows="12" placeholder="Write your post here. Leave a blank line between paragraphs." required></textarea>
-          <p class="field-hint">Plain text. A blank line starts a new paragraph.</p>
+          <p class="field-hint">
+            Plain text. A blank line starts a new paragraph.
+            <button type="button" class="btn btn-ghost" id="aInsertImageBtn" style="margin-left:.5rem">+ Insert photo</button>
+          </p>
+          <input type="file" id="a_body_image" accept="image/*,.heic,.heif" hidden />
         </div>
 
         <div class="field">

@@ -194,6 +194,40 @@
     }
   });
 
+  /* ---------- insert photo into article body ---------- */
+  const bodyEl = $("a_body");
+  const bodyImageInput = $("a_body_image");
+  $("aInsertImageBtn").addEventListener("click", () => bodyImageInput.click());
+  bodyImageInput.addEventListener("change", async () => {
+    const f = bodyImageInput.files && bodyImageInput.files[0];
+    bodyImageInput.value = "";
+    if (!f) return;
+    const btn = $("aInsertImageBtn");
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Uploading…";
+    try {
+      const url = await uploadImage(f);
+      const start = bodyEl.selectionStart ?? bodyEl.value.length;
+      const end = bodyEl.selectionEnd ?? bodyEl.value.length;
+      const before = bodyEl.value.slice(0, start);
+      const after = bodyEl.value.slice(end);
+      const leadIn = before && !before.endsWith("\n\n") ? (before.endsWith("\n") ? "\n" : "\n\n") : "";
+      const leadOut = after && !after.startsWith("\n\n") ? (after.startsWith("\n") ? "\n" : "\n\n") : "";
+      const snippet = `${leadIn}![](${url})${leadOut}`;
+
+      bodyEl.value = before + snippet + after;
+      const cursor = (before + snippet).length;
+      bodyEl.focus();
+      bodyEl.setSelectionRange(cursor, cursor);
+    } catch (err) {
+      alert(err.message || String(err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+
   function slugify(text) {
     return text
       .toLowerCase()

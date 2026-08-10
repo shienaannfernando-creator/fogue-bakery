@@ -874,6 +874,10 @@ ul, ol { margin: 0; }
 }
 .article-body p { margin: 0 0 1.4rem; }
 .article-body .back-link { margin-top: 1.5rem; }
+.article-inline-img {
+  display: block; width: 100%; max-width: 700px; margin: 0.5rem auto 2rem;
+  border-radius: 14px; box-shadow: var(--shadow);
+}
 
 /* ============================================================
    Book promo page (book.html)
