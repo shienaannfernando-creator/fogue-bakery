@@ -15,6 +15,13 @@
 </head>
 <body>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="doodleWobble" x="-60%" y="-120%" width="220%" height="340%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045 0.09" numOctaves="2" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
   <div class="topbar"></div>
 
   <header class="site-header" id="siteHeader">
@@ -51,8 +58,12 @@
       <img src="public/images/buttercream.jpg" alt="Swirling buttercream in a bowl" class="reveal" />
       <div class="about-text reveal">
         <h2 class="serif">made from scratch, by hand</h2>
-        <p>We bake everything from scratch — real butter, real vanilla, no shortcuts. From silky brigadeiros to towering layer cakes and our famous no-churn ice cream, every order is mixed, baked, and finished by hand the day it goes out.</p>
-        <p>Small batches mean we can fuss over the details: browning the butter properly, whipping cream to just the right peak, toasting meringue until it's exactly golden. It's slower. It tastes better. We think that's the whole point.</p>
+        <p>My journey with baking didn't begin with me but years and years ago when my grandma took her passion and began sharing it with others in her community during her baking classes. My mother, who hated ordering food for dinner parties and insisted we always served homemade food whenever possible to share our culture and effort. And then, to me, a girl who had a huge sweet tooth, and maybe a bigger passion in the kitchen.</p>
+        <p>I still use the same Wilton tips my grandmother lent me years ago for icing cakes and the same recipes my mother used before I took over the kitchen at home. And now, I hope to share my learnings, both from the kitchen and also the books through this online magazine. An online scrapbook of mine.</p>
+        <div class="about-photos">
+          <img src="public/images/shiena-pastries.jpg" alt="Shiena holding a plate of fresh pastries" loading="lazy" />
+          <img src="public/images/shiena-brooki.png" alt="Shiena visiting the Brooki cookie shop" loading="lazy" />
+        </div>
         <a href="recipes.html" class="pill">browse the recipes</a>
       </div>
     </div>
@@ -80,18 +91,22 @@
     </div>
   </section>
 
-  <section class="split">
-    <div class="split-left">
-      <img src="public/images/cake-orange-2.jpg" alt="A signature Fogue layer cake" />
-    </div>
-    <div class="split-right">
-      <p class="eyebrow">now taking orders</p>
-      <h2 class="serif">Let's bake something</h2>
-      <p>Whether it's a recipe to make at home or a custom cake for the big day, we'd love to be part of it.</p>
-      <div class="retailers">
-        <a href="recipes.html#Cakes">birthday cakes</a>
-        <a href="recipes.html#Brigadeiros">brigadeiro boxes</a>
-        <a href="recipes.html#Ice%20Cream" class="retailers-centered">ice cream pints</a>
+  <section class="gallery">
+    <div class="wrap">
+      <div class="gallery-head reveal">
+        <h2 class="serif">cakes I've loved making</h2>
+        <p class="eyebrow">over the years</p>
+        <p>A few of the bakes I've made for birthdays, celebrations, and everything in between.</p>
+      </div>
+      <div class="gallery-grid">
+        <img src="public/images/gallery-beer-cake.jpg" alt="A beer mug birthday cake with an edible foam top" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-meringue-pie.jpg" alt="A toasted meringue-topped pie" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-whiskey-barrel.jpg" alt="A whiskey barrel birthday cake with mini bottle toppers" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-blue-floral.jpg" alt="A blue buttercream cake with piped white flowers" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-chocolate-drip.jpg" alt="A chocolate drip cake topped with Ferrero Rocher" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-lace-cake.jpg" alt="A cake piped with a blue lace-style pattern and toasted meringue" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-pink-rose.jpg" alt="A pink birthday cake with piped roses" class="reveal" loading="lazy" />
+        <img src="public/images/gallery-vine-cake.jpg" alt="A cake with a painted blue door and piped vines" class="reveal" loading="lazy" />
       </div>
     </div>
   </section>

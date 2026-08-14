@@ -76,26 +76,44 @@ ul, ol { margin: 0; }
 }
 
 /* ---------- buttons ---------- */
+/* The fill lives on ::before (not on .pill itself) so the hand-drawn
+   wobble filter (#doodleWobble, defined inline in the page markup)
+   distorts the whole outline organically without smearing the text.
+   Colors are unchanged from before, just routed through --btn-bg /
+   --btn-bg-hover so ::before can pick them up. */
 .pill {
+  position: relative;
+  isolation: isolate;
   display: inline-block;
-  background: var(--pink);
+  --btn-bg: var(--pink);
+  --btn-bg-hover: var(--pink-deep);
+  background: transparent;
   color: var(--pink-text);
   font-weight: 600;
   letter-spacing: .04em;
   padding: .85em 2.2em;
-  border-radius: 999px;
   border: none;
   cursor: pointer;
-  transition: background .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+  transition: color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--btn-bg);
+  border-radius: 72% 28% 61% 39% / 37% 68% 32% 63%;
+  filter: url(#doodleWobble);
+  transition: background-color .25s var(--ease);
 }
 .pill:hover {
-  background: var(--pink-deep);
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 12px 24px -12px rgba(233, 167, 178, .9);
 }
-.pill-beige { background: var(--beige); color: var(--ink); }
-.pill-beige:hover { background: var(--cream-deep); color: var(--ink); box-shadow: 0 12px 24px -12px rgba(43, 39, 36, .35); }
+.pill:hover::before { background-color: var(--btn-bg-hover); }
+.pill-beige { --btn-bg: var(--beige); --btn-bg-hover: var(--cream-deep); color: var(--ink); }
+.pill-beige:hover { color: var(--ink); box-shadow: 0 12px 24px -12px rgba(43, 39, 36, .35); }
 
 .link-arrow {
   display: inline-flex;
@@ -363,53 +381,34 @@ ul, ol { margin: 0; }
 .cats .pill { margin-top: 2.4rem; }
 
 /* ============================================================
-   Cookbook / signature split
+   Bake gallery (about page)
    ============================================================ */
-.split { display: grid; grid-template-columns: 1fr 1fr; min-height: 520px; }
-.split-left {
-  background: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
+.gallery { padding-block: clamp(2.5rem, 5vw, 4.5rem); background: var(--cream); }
+.gallery-head { text-align: center; margin: 0 auto clamp(2rem, 4vw, 3rem); }
+.gallery-head h2 { font-family: var(--serif); font-weight: 800; font-size: clamp(1.5rem, 3.4vw, 2.8rem); margin: 0 0 .6rem; white-space: nowrap; }
+.gallery-head .eyebrow { max-width: none; margin: 0 0 .8rem; }
+.gallery-head p { color: var(--ink-soft); margin: 0 auto; max-width: 46ch; }
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(.7rem, 1.6vw, 1.2rem); }
+.gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 2px;
+  transition: transform .5s var(--ease);
 }
-.split-left img {
-  width: min(360px, 70%);
-  border-radius: 3px;
-  box-shadow: 0 30px 60px -25px rgba(0,0,0,.35);
-}
-.split-right {
-  background: var(--pink);
-  color: var(--pink-text);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(2.5rem, 5vw, 5rem);
-}
-.split-right .eyebrow { color: var(--pink-text); opacity: .8; }
-.split-right h2 { font-family: var(--serif); font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 800; margin: .6rem 0 1rem; }
-.split-right p { max-width: 36ch; margin: 0 0 2rem; }
-.retailers { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; max-width: 420px; }
-.retailers a {
-  background: var(--cream);
-  text-align: center;
-  padding: .85em 1em;
-  border-radius: 999px;
-  font-size: .9rem;
-  transition: background .2s var(--ease), color .2s var(--ease), transform .2s var(--ease);
-}
-.retailers a:hover { background: var(--pink-text); color: #fff; transform: translateY(-2px); }
-.retailers-centered { grid-column: 1 / -1; justify-self: center; width: calc(50% - .4rem); }
+.gallery-grid img:hover { transform: scale(1.04); }
 
 /* ============================================================
    About strip + page
    ============================================================ */
 .about { background: var(--cream); }
-.about-feature { padding-block: clamp(2.5rem, 5vw, 4.5rem); }
+.about-feature { padding-top: clamp(1.2rem, 2.2vw, 2rem); padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
 .about-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 4vw, 4rem); align-items: center; }
 .about-grid img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 2px; }
 .about-text h2 { font-family: var(--serif); font-weight: 800; font-size: clamp(2rem, 3.4vw, 2.8rem); margin: 0 0 1.2rem; }
 .about-text p { color: var(--ink-soft); margin: 0 0 1.4rem; }
+.about-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0 0 1.6rem; }
+.about-photos img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 2px; }
 
 /* values grid */
 .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 3rem); }
@@ -468,6 +467,9 @@ ul, ol { margin: 0; }
   padding: clamp(2rem, 2.2vw, 2.5rem);
   box-shadow: 0 22px 42px -28px rgba(43, 39, 36, .18);
 }
+.values .value:nth-child(1) { background: var(--pink-light); }
+.values .value:nth-child(2) { background: color-mix(in srgb, var(--pink-light) 45%, var(--pink) 55%); }
+.values .value:nth-child(3) { background: color-mix(in srgb, var(--pink-light) 10%, var(--pink) 90%); }
 .value-icon {
   width: 56px;
   height: 56px;
@@ -791,7 +793,7 @@ ul, ol { margin: 0; }
   .hero-feature { justify-self: start; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
-  .split { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
   .about-grid { grid-template-columns: 1fr; }
   .values-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .newsletter-inner { grid-template-columns: 1fr; }
@@ -821,7 +823,7 @@ ul, ol { margin: 0; }
 @media (max-width: 560px) {
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
-  .retailers { grid-template-columns: 1fr; }
+  .gallery-head h2 { white-space: normal; }
   .recipe-steps li { grid-template-columns: 1fr; gap: .5rem; }
 }
 
@@ -877,6 +879,29 @@ ul, ol { margin: 0; }
 .article-inline-img {
   display: block; width: 100%; max-width: 700px; margin: 0.5rem auto 2rem;
   border-radius: 14px; box-shadow: var(--shadow);
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.2rem, 4vw, 2.2rem);
+  margin: 0 0 2.6rem;
+}
+.feature-item img {
+  width: 52%;
+  max-width: 300px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 18px 22px rgba(43, 39, 36, .28));
+  transform: rotate(-4deg);
+  transition: transform .35s var(--ease);
+}
+.feature-item:nth-child(even) img { transform: rotate(4deg); }
+.feature-item:hover img { transform: rotate(0deg) scale(1.03); }
+.feature-copy h3 { font-family: var(--serif); font-weight: 800; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.15; margin: 0 0 .5rem; }
+.feature-copy p { color: var(--ink-soft); font-size: 1rem; line-height: 1.6; margin: 0; }
+@media (max-width: 560px) {
+  .feature-item { flex-direction: column; align-items: flex-start; text-align: left; gap: .8rem; }
+  .feature-item img { width: 70%; max-width: 240px; align-self: center; }
+  .feature-item img { width: 55%; max-width: 180px; }
 }
 
 /* ============================================================

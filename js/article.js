@@ -23,7 +23,11 @@
   // Turn plain text into paragraphs: blank lines separate paragraphs,
   // single newlines become <br>. A paragraph containing only
   // ![alt](url) is rendered as an inline image instead of text, so
-  // photos can be dropped in between paragraphs.
+  // photos can be dropped in between paragraphs. A paragraph whose
+  // FIRST line is ![alt](url) followed by more lines is rendered as a
+  // "feature" block instead: big image, then the next line as a
+  // headline and any remaining lines as a short blurb — used for
+  // things like a favorite-tools rundown.
   const imageLine = /^!\[([^\]]*)\]\(([^)]+)\)$/;
 
   function bodyHTML(text) {
@@ -32,7 +36,20 @@
       .map((p) => p.trim())
       .filter(Boolean)
       .map((p) => {
-        const m = p.match(imageLine);
+        const lines = p.split("\n").map((l) => l.trim()).filter(Boolean);
+        const m = lines[0] && lines[0].match(imageLine);
+        if (m && lines.length > 1) {
+          const [, alt, url] = m;
+          const headline = lines[1];
+          const blurb = lines.slice(2).join(" ");
+          return `<div class="feature-item">
+            <img src="${esc(url)}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()" />
+            <div class="feature-copy">
+              <h3 class="serif">${esc(headline)}</h3>
+              ${blurb ? `<p>${esc(blurb)}</p>` : ""}
+            </div>
+          </div>`;
+        }
         if (m) {
           const [, alt, url] = m;
           return `<img class="article-inline-img" src="${esc(url)}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()" />`;

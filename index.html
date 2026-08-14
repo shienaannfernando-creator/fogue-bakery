@@ -15,6 +15,13 @@
 </head>
 <body>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="doodleWobble" x="-60%" y="-120%" width="220%" height="340%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045 0.09" numOctaves="2" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
   <div class="topbar"></div>
 
   <!-- ===================== HEADER ===================== -->
@@ -190,8 +197,9 @@
       <div class="about-text reveal">
         <p class="eyebrow">our story</p>
         <h2 class="serif" id="dreamHeading">a big dream with an even bigger sweet tooth</h2>
-        <p>Fogue started in a home kitchen with one stand mixer and a stubborn belief that dessert should taste like it was made by someone who loves you. We bake everything from scratch — real butter, real vanilla, no shortcuts.</p>
-        <p>From silky brigadeiros to towering layer cakes and our famous no-churn ice cream, every order is mixed, baked, and finished by hand the day it goes out.</p>
+        <p>Fogue started in a home kitchen with one electric whisk and a generational belief that dessert should taste like it was made by someone who loves you. My family comes together over food and it is our favorite conversation, activity and source of happiness.</p>
+        <p>I became more and more involved in the kitchen as I watched my mom bake, slowly getting more responsibility and creative autonomy. I soon became the designated baker and found a deep passion in the things I baked, and more importantly, sharing them with others. Fogue is not just a bunch of recipes posted online but it's a scrapbook of my perspective when it comes to food. Quick, easy-to-find recipes supported with education and advocacy for finding health and balance in our diets.</p>
+        <p>Because no matter if you're the one creating the dishes, or enjoying them, food is an essential part of our lifestyle. And, to me, it is our most important.</p>
         <a href="about.html" class="pill">our story</a>
       </div>
     </div>
@@ -203,7 +211,7 @@
       <div class="reveal">
         <p class="eyebrow">the sweet list</p>
         <h2 class="serif">new bakes in your inbox</h2>
-        <p>Recipes, restock alerts and the occasional secret menu — once a week, never spammy.</p>
+        <p>New recipes, blog posts or even the next full edition of our magazine. Stay in touch with fogue. Not now, never spammy :)</p>
       </div>
       <form class="news-form reveal" id="newsForm">
         <div class="news-row">
